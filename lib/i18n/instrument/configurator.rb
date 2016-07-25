@@ -1,7 +1,7 @@
 module I18n
   module Instrument
     class Configurator
-      DEFAULT_ENABLED_FILE = 'config/enable_i18n_instrumentation.txt'
+      DEFAULT_ENABLED_FILE = File.join('config', 'enable_i18n_instrumentation')
       DEFAULT_JS_ENDPOINT = '/i18n/instrument.json'
 
       attr_accessor :js_endpoint, :stack_trace_prefix
@@ -11,7 +11,7 @@ module I18n
         @stack_trace_prefix = Rails.root.to_s
 
         @on_check_enabled_proc = -> do
-          Rails.root.join('config', 'enable_i18n_instrumentation.txt').exist?
+          Rails.root.join(DEFAULT_ENABLED_FILE).exist?
         end
 
         @on_error_proc = ->(e) { raise e }

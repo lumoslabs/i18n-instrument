@@ -46,8 +46,6 @@ module I18n
       end
 
       def call(env)
-        return @app.call(env) unless enabled?
-
         if i18n_js_request?(env)
           handle_i18n_js_request(env)
         else
@@ -76,6 +74,8 @@ module I18n
       end
 
       def handle_regular_request(env)
+        return @app.call(env) unless enabled?
+
         request_uri = env['REQUEST_URI']
         routes = env['action_dispatch.routes']
 
@@ -93,6 +93,8 @@ module I18n
       end
 
       def handle_i18n_js_request(env)
+        return JS_RESPONSE unless enabled?
+
         body = JSON.parse(env['rack.input'].read)
         routes = env['action_dispatch.routes']
 

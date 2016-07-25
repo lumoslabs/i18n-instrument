@@ -16,8 +16,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'i18n-debug', '~> 1.0'
   s.add_dependency 'railties', '~> 4'
   s.add_dependency 'request_store', '~> 1.0'
-  s.add_dependency 'sequel', '~> 4.0'
-  s.add_dependency 'sqlite3', '~> 1.0'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'README.md', 'i18n-instrument.gemspec', 'LICENSE']

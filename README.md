@@ -102,7 +102,7 @@ end
 Be careful not to call `I18n::Instrument.configure` more than once - doing so will replace any existing configuration you may have already done. Instead, try this:
 
 ```ruby
-# replace any existing on_record behavior
+# replace any existing on_record behavior, but leave all other configuration intact
 I18n::Instrument.config.on_record do |params|
   ...
 end

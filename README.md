@@ -55,7 +55,7 @@ The only foolproof way to collect information about the localization strings you
   * **`controller`**: the controller that served the request.
   * **`action`**: the action that served the request.
   * **`trace`**: the filename and line number from the first application stack frame, i.e. the place in your code `I18n.t` was called.
-  * **`key`*: the localization key.
+  * **`key`**: the localization key.
   * **`source`**: either "ruby" or "javascript".
   * **`locale`**: the value of `I18n.locale` in Ruby or Javascript.
 

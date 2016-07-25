@@ -1,0 +1,1 @@
+I18n::Instrument::DummyApplication.config.secret_key_base = 'f143e3cfadebed70d460d62312a6d1a254395209ebba31f9693ab199f6e817a57e22f5ad7d2770a6d29baf837998dcfa32b94705d87d37e90b63a4a153ef52c0'

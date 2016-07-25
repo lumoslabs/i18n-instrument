@@ -1,0 +1,140 @@
+require 'i18n/debug'
+require 'request_store'
+
+module I18n
+  module Instrument
+    class Middleware
+      # used to store request information in the request store
+      STORE_KEY = :i18n_instrumentation
+
+      # canned response sent to js instrumentation requests
+      JS_RESPONSE = [
+        200, {
+          'Content-Type' => 'application/json',
+          'Content-Length' => 2
+        }, [
+          '{}'
+        ]
+      ]
+
+      def initialize(app)
+        @app = app
+
+        # this will fire on every call to I18n.t
+        I18n::Debug.on_lookup do |key, value|
+          next unless enabled?
+          config.on_lookup.call(key, value)
+
+          begin
+            # find the first application-specific line in the stack trace
+            raw_trace = filter_stack_trace(::Kernel.caller)
+            trace = raw_trace.split(":in `").first if raw_trace
+
+            # grab path params (set in `call` method below)
+            path_params = store.fetch(STORE_KEY, {}).fetch(:path_params, nil)
+
+            if path_params && trace.present?
+              record_translation_lookup(
+                path_params: path_params, trace: trace, key: key,
+                locale: I18n.locale.to_s, source: 'ruby'
+              )
+            end
+          rescue => e
+            config.on_error.call(e)
+          end
+        end
+      end
+
+      def call(env)
+        return @app.call(env) unless enabled?
+
+        if i18n_js_request?(env)
+          handle_i18n_js_request(env)
+        else
+          handle_regular_request(env)
+        end
+      rescue => e
+        config.on_error.call(e)
+        @app.call(env)
+      end
+
+      private
+
+      def filter_stack_trace(trace)
+        trace.find { |line| line.start_with?(config.stack_trace_prefix) }
+      end
+
+      def record_translation_lookup(path_params:, trace:, key:, locale:, source:)
+        config.on_record.call({
+          controller: path_params[:controller],
+          action: path_params[:action],
+          trace: trace,
+          key: key,
+          source: source,
+          locale: locale
+        })
+      end
+
+      def handle_regular_request(env)
+        request_uri = env['REQUEST_URI']
+        routes = env['action_dispatch.routes']
+
+        path_params = begin
+          routes.recognize_path(request_uri)
+        rescue ActionController::RoutingError
+          nil
+        end
+
+        # store params from env in request storage so they can be used in the
+        # I18n on_lookup callback above
+        store[STORE_KEY] = { path_params: path_params}
+
+        @app.call(env)
+      end
+
+      def handle_i18n_js_request(env)
+        body = JSON.parse(env['rack.input'].read)
+        routes = env['action_dispatch.routes']
+
+        path_params = begin
+          routes.recognize_path(body.fetch('url', ''))
+        rescue ActionController::RoutingError
+          nil
+        end
+
+        key = body['key']
+        locale = body['locale']
+
+        if path_params && key.present?
+          record_translation_lookup(
+            path_params: path_params, trace: nil, key: key,
+            locale: locale, source: 'javascript'
+          )
+        end
+
+        JS_RESPONSE
+      end
+
+      def i18n_js_request?(env)
+        env.fetch('REQUEST_URI', '').include?(js_endpoint) &&
+          env.fetch('REQUEST_METHOD', '').upcase == 'POST'
+      end
+
+      def config
+        I18n::Instrument.config
+      end
+
+      def js_endpoint
+        config.js_endpoint
+      end
+
+      def enabled?
+        config.enabled?
+      end
+
+      def store
+        RequestStore.store
+      end
+    end
+  end
+end

@@ -1,0 +1,29 @@
+(function() {
+  // rebind so `this` is set correctly on call
+  var originalFunction = I18n.translate.bind(I18n);
+
+  // override original t and translate functions
+  I18n.t = I18n.translate = function(scope, options) {
+    if (I18n.instrumentation_enabled) {
+      // get fully qualified key
+      var opts = I18n.prepareOptions(options);
+      var key = I18n.getFullScope(scope, opts);
+      var data = {
+        key: key,
+        locale: I18n.locale,
+        url: window.location.href
+      };
+
+      // make request to instrumentation middleware
+      $.ajax({
+        url: '<%= I18n::Instrument.config.js_endpoint %>',
+        type: 'post',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        headers: {'Content-Type': 'application/json'}
+      });
+    }
+
+    originalFunction(scope, options);
+  }
+})();

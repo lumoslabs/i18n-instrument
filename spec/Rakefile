@@ -1,0 +1,8 @@
+require 'rails'
+require 'action_controller/railtie'
+require 'action_view/railtie'
+
+require File.expand_path('../config/application', __FILE__)
+
+I18n::Instrument::DummyApplication.initialize!
+I18n::Instrument::DummyApplication.load_tasks

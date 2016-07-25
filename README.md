@@ -124,6 +124,14 @@ Also, don't forget to enable Javascript instrumentation by adding this line, pro
 I18n.instrumentation_enabled = true
 ```
 
+## Requirements
+
+i18n-instrument is designed to work with Rails 4 and up, although it has not been tested under Rails 5 yet.
+
+## Testing
+
+Run the test suite with `bundle exec rspec`.
+
 ## Authors
 
 * Cameron C. Dutro ([@camertron](https://github.com/camertron)) on behalf of Lumos Labs, Inc.

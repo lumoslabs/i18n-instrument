@@ -42,7 +42,7 @@ First of all, I sincerely hope you never write code like this - it's probably ba
 
 So glad you asked.
 
-The only foolproof way to collect information about the localization strings your app is using is during runtime. This gem, i18n-instrument, is capable of annotating calls to `I18n.t` in Ruby/Rails and Javascript (provided you're using the capable [i18n-js gem](https://github.com/fnando/i18n-js)). Whenever one of these methods is called, i18n-instrument will fire the `on_record` callback and pass you some useful information. From there, the possibilities are endless. You could log the information to the console, write it somewhere useful, save it to a database, you name it.
+The only foolproof way to collect information about the localization strings your app is using is during runtime. This gem, i18n-instrument, is capable of annotating calls to `I18n.t` in Ruby/Rails and Javascript (provided you're using the capable [i18n-js gem](https://github.com/fnando/i18n-js)). Whenever one of these methods is called, i18n-instrument will fire the `on_record` callback and pass you some useful information. From there, the possibilities are endless. You could log the information to the console, write it down somewhere useful, save it to a database, you name it.
 
 ## Callbacks
 
@@ -117,3 +117,17 @@ Using i18n-instrument in Javascript is pretty straightforward - just include it 
 //= require i18n/instrument
 ```
 Make sure to include i18n/instrument ***after*** i18n. This is critical since i18n-instrument overrides i18n's `t` method.
+
+Also, don't forget to enable Javascript instrumentation by adding this line, probably at the bottom of application.js:
+
+```javascript
+I18n.instrumentation_enabled = true
+```
+
+## Authors
+
+* Cameron C. Dutro ([@camertron](https://github.com/camertron)) on behalf of Lumos Labs, Inc.
+
+## License
+
+Licensed under the MIT license.

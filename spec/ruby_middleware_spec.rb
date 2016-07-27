@@ -5,7 +5,7 @@ describe I18n::Instrument::Middleware, type: :request do
   let(:recorded_params) { [] }
   let(:config) { I18n::Instrument.config }
   let(:control_file) do
-    File.join('spec', 'config', 'enable_i18n_instrumentation.txt')
+    File.join('spec', 'config', 'enable_i18n_instrumentation')
   end
 
   before(:each) do
@@ -43,8 +43,7 @@ describe I18n::Instrument::Middleware, type: :request do
 
       expect(params[:source]).to eq('ruby')
       expect(params[:trace]).to include('app/controllers/tests_controller.rb')
-      expect(params[:controller]).to eq('tests')
-      expect(params[:action]).to eq('index')
+      expect(params[:url]).to eq('/tests')
       expect(params[:key]).to eq('en.foo.bar')
       expect(params[:locale]).to eq('en')
     end

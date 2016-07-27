@@ -31,11 +31,11 @@ module I18n
             trace = raw_trace.split(":in `").first if raw_trace
 
             # grab path params (set in `call` method below)
-            path_params = store.fetch(STORE_KEY, {}).fetch(:path_params, nil)
+            url = store.fetch(STORE_KEY, {}).fetch(:url, nil)
 
-            if path_params && trace.present?
+            if url.present? && trace.present?
               record_translation_lookup(
-                path_params: path_params, trace: trace, key: key,
+                url: url, trace: trace, key: key,
                 locale: I18n.locale.to_s, source: 'ruby'
               )
             end
@@ -62,32 +62,19 @@ module I18n
         trace.find { |line| line.start_with?(config.stack_trace_prefix) }
       end
 
-      def record_translation_lookup(path_params:, trace:, key:, locale:, source:)
+      def record_translation_lookup(url:, trace:, key:, locale:, source:)
         config.on_record.call({
-          controller: path_params[:controller],
-          action: path_params[:action],
-          trace: trace,
-          key: key,
-          source: source,
-          locale: locale
+          url: url, trace: trace, key: key,
+          source: source, locale: locale
         })
       end
 
       def handle_regular_request(env)
         return @app.call(env) unless enabled?
 
-        request_uri = env['REQUEST_URI']
-        routes = env['action_dispatch.routes']
-
-        path_params = begin
-          routes.recognize_path(request_uri)
-        rescue ActionController::RoutingError
-          nil
-        end
-
         # store params from env in request storage so they can be used in the
         # I18n on_lookup callback above
-        store[STORE_KEY] = { path_params: path_params}
+        store[STORE_KEY] = { url: env['REQUEST_URI'] }
 
         @app.call(env)
       end
@@ -96,20 +83,13 @@ module I18n
         return JS_RESPONSE unless enabled?
 
         body = JSON.parse(env['rack.input'].read)
-        routes = env['action_dispatch.routes']
-
-        path_params = begin
-          routes.recognize_path(body.fetch('url', ''))
-        rescue ActionController::RoutingError
-          nil
-        end
-
+        url = body['url']
         key = body['key']
         locale = body['locale']
 
-        if path_params && key.present?
+        if url.present? && key.present?
           record_translation_lookup(
-            path_params: path_params, trace: nil, key: key,
+            url: url, trace: nil, key: key,
             locale: locale, source: 'javascript'
           )
         end

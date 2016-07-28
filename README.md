@@ -52,8 +52,7 @@ The only foolproof way to collect information about the localization strings you
 
   The `params` hash contains the following keys (all values are strings):
   
-  * **`controller`**: the controller that served the request.
-  * **`action`**: the action that served the request.
+  * **`url`**: the request URL.
   * **`trace`**: the filename and line number from the first application stack frame, i.e. the place in your code `I18n.t` was called.
   * **`key`**: the localization key.
   * **`source`**: either "ruby" or "javascript".
@@ -122,6 +121,16 @@ Also, don't forget to enable Javascript instrumentation by adding this line, pro
 
 ```javascript
 I18n.instrumentation_enabled = true
+```
+
+Alternatively, you could enable or disable Javascript instrumentation per request by adding something like this to your application layout:
+
+```HTML+ERB
+<% if I18n::Instrument.config.enabled? %>
+  <script src="javascript">
+    I18n.instrumentation_enabled = true
+  </script>
+<% end %>
 ```
 
 ## Requirements

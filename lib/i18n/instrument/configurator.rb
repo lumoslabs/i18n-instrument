@@ -20,19 +20,23 @@ module I18n
       end
 
       def on_lookup(&block)
-        block ? @on_lookup_proc = block : @on_lookup_proc
+        return @on_lookup_proc unless block
+        @on_lookup_proc = block
       end
 
       def on_record(&block)
-        block ? @on_record_proc = block : @on_record_proc
+        return @on_record_proc unless block
+        @on_record_proc = block
       end
 
       def on_error(&block)
-        block ? @on_error_proc = block : @on_error_proc
+        return @on_error_proc unless block
+        @on_error_proc = block
       end
 
       def on_check_enabled(&block)
-        block ? @on_check_enabled_proc = block : @on_check_enabled_proc
+        return @on_check_enabled_proc unless block
+        @on_check_enabled_proc = block
       end
 
       def enabled?

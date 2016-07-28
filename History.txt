@@ -1,0 +1,5 @@
+== 1.0.1
+* Avoid using assignment expressions in ternaries in configurator.
+
+== 1.0.0
+* Birthday!

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lumoslabs/i18n-instrument.svg?branch=master)](https://travis-ci.org/lumoslabs/i18n-instrument)
+
 # i18n-instrument
 Instrument calls to I18n.t in Ruby and JavaScript in your Rails app.
 
@@ -51,7 +53,7 @@ The only foolproof way to collect information about the localization strings you
 * **`on_record(params : Hash)`**: Similar to `on_lookup` but comes with a bunch of useful information.
 
   The `params` hash contains the following keys (all values are strings):
-  
+
   * **`url`**: the request URL.
   * **`trace`**: the filename and line number from the first application stack frame, i.e. the place in your code `I18n.t` was called.
   * **`key`**: the localization key.
@@ -71,27 +73,27 @@ I18n::Instrument.configure do |config|
   # The first stack trace line that begins with this string will be passed to
   # `on_record` as the `trace` value. Defaults to `Rails.root`.
   config.stack_trace_prefix = 'custom/path/to/app'
-  
+
   # The URL you want your app to send js instrumentation requests to. Defaults
   # to '/i18n/instrument.json'.
   config.js_endpoint = '/my_i18n/foo.json'
 
   # all of the callback methods are available here
-  
+
   config.on_record do |params|
     # print params to the rails log
     Rails.logger.info(params.inspect)
   end
-  
+
   config.on_lookup do |key, value|
     puts "Looked up i18n key #{key} and got value #{value}"
   end
-  
+
   config.on_error do |e|
     # report errors to our error aggregation service
     Rollbar.error(e)
   end
-  
+
   config.on_check_enabled do
     # always enable
     true

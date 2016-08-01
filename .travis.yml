@@ -8,5 +8,5 @@ env:
   - RAILS_VERSION=4.1.15
   - RAILS_VERSION=4.2.7
   - RAILS_VERSION=5.0.0
-script: rm Gemfile.lock; bundle exec rspec
-bundler_args: "--no-deployment"
+before_script: gem install bundler -v 1.12.5
+script: bundle exec rspec

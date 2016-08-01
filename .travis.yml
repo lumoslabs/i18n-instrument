@@ -1,0 +1,12 @@
+sudo: false
+language: ruby
+rvm:
+  - 2.1.6
+  - 2.2.4
+env:
+  - RAILS_VERSION=4.0.13
+  - RAILS_VERSION=4.1.15
+  - RAILS_VERSION=4.2.7
+  - RAILS_VERSION=5.0.0
+script: rm Gemfile.lock; bundle exec rspec
+bundler_args: "--no-deployment"

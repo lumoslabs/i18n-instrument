@@ -13,6 +13,6 @@ group :development, :test do
   if ENV['RAILS_VERSION']
     gem 'rails', "~> #{ENV['RAILS_VERSION']}"
   else
-    gem 'rails', '>= 4.0'
+    gem 'rails', '~> 4.0'
   end
 end

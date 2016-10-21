@@ -80,10 +80,10 @@ describe I18n::Instrument::Middleware, type: :request do
 
       it 'reports errors that happen during the middleware stack' do
         expect_any_instance_of(I18n::Instrument::Middleware).to(
-          receive(:handle_regular_request).and_raise('jelly beans')
+          receive(:store).twice.and_raise('jelly beans')
         )
 
-        expect { get '/tests' }.to change { recorded_errors.size }.from(0).to(1)
+        expect { get '/tests' }.to change { recorded_errors.size }.from(0).to(2)
         expect(response).to be_success
       end
     end

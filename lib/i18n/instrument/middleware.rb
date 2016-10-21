@@ -51,9 +51,6 @@ module I18n
         else
           handle_regular_request(env)
         end
-      rescue => e
-        config.on_error.call(e)
-        @app.call(env)
       end
 
       private
@@ -72,9 +69,13 @@ module I18n
       def handle_regular_request(env)
         return @app.call(env) unless enabled?
 
-        # store params from env in request storage so they can be used in the
-        # I18n on_lookup callback above
-        store[STORE_KEY] = { url: env['REQUEST_URI'] }
+        begin
+          # store params from env in request storage so they can be used in the
+          # I18n on_lookup callback above
+          store[STORE_KEY] = { url: env['REQUEST_URI'] }
+        rescue => e
+          config.on_error.call(e)
+        end
 
         @app.call(env)
       end
@@ -93,8 +94,10 @@ module I18n
             locale: locale, source: 'javascript'
           )
         end
-
-        JS_RESPONSE
+      rescue => e
+        config.on_error.call(e)
+      ensure
+        return JS_RESPONSE
       end
 
       def i18n_js_request?(env)

@@ -19,11 +19,11 @@ describe I18n::Instrument::Middleware, type: :request do
   it 'records I18n.t calls in javascript' do
     params = { url: valid_url, key: valid_key, locale: 'en' }
 
-    expect { post(config.js_endpoint, params.to_json, headers) }.to(
+    expect { post(config.js_endpoint, params: params.to_json, headers: headers) }.to(
       change { recorded_params.size }.from(0).to(1)
     )
 
-    expect(response).to be_success
+    expect(response).to be_successful
 
     params = recorded_params.first
     expect(params[:source]).to eq('javascript')
@@ -36,11 +36,11 @@ describe I18n::Instrument::Middleware, type: :request do
   it "doesn't record anything when given a blank key" do
     params = { url: valid_url, key: invalid_key, locale: 'en' }
 
-    expect { post(config.js_endpoint, params.to_json, headers) }.to_not(
+    expect { post(config.js_endpoint, params: params.to_json, headers: headers) }.to_not(
       change { recorded_params.size }.from(0)
     )
 
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 
   context 'with instrumentation disabled' do
@@ -51,7 +51,7 @@ describe I18n::Instrument::Middleware, type: :request do
     it "doesn't record any javascript I18n.t calls" do
       params = { url: valid_url, key: valid_key, locale: 'en' }
 
-      expect { post(config.js_endpoint, params.to_json, headers) }.to_not(
+      expect { post(config.js_endpoint, params: params.to_json, headers: headers) }.to_not(
         change { recorded_params.size }.from(0)
       )
     end

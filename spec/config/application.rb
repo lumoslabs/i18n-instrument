@@ -1,3 +1,4 @@
+require "sprockets/railtie"
 module I18n
   module Instrument
     class DummyApplication < ::Rails::Application

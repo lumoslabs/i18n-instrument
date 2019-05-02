@@ -1,11 +1,13 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.1.6
-  - 2.2.4
+  - 2.2.10
+  - 2.3.7
+  - 2.4.4
+  - 2.5.3
 env:
-  - RAILS_VERSION=4.0.13
-  - RAILS_VERSION=4.1.15
-  - RAILS_VERSION=4.2.7
-before_script: gem install bundler -v 1.12.5
+  - RAILS_VERSION=5.0.7
+  - RAILS_VERSION=5.1.7
+  - RAILS_VERSION=5.2.3
+before_script: gem install bundler -v 1.17.3
 script: bundle exec rspec

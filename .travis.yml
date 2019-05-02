@@ -6,6 +6,7 @@ rvm:
   - 2.3.7
   - 2.4.4
 env:
+  - RAILS_VERSION=4.2.11
   - RAILS_VERSION=5.0.7
 before_script: gem install bundler -v 1.17.3
 script: bundle exec rspec

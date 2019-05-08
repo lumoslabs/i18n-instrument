@@ -38,7 +38,7 @@ describe I18n::Instrument::Middleware, type: :request do
 
     it 'records ruby I18n.t calls' do
       expect { get('/tests') }.to change { recorded_params.size }.from(0).to(1)
-      expect(response).to be_success
+      expect(response).to be_successful
       params = recorded_params.first
 
       expect(params[:source]).to eq('ruby')
@@ -51,7 +51,7 @@ describe I18n::Instrument::Middleware, type: :request do
     it 'by default, renders a 500 for errors that happen during lookup' do
       config.on_record { raise 'jelly beans' }
       get '/tests'
-      expect(response).to_not be_success
+      expect(response).to_not be_successful
     end
 
     # @TODO
@@ -61,7 +61,7 @@ describe I18n::Instrument::Middleware, type: :request do
       )
 
       get '/tests'
-      expect(response).to_not be_success
+      expect(response).to_not be_successful
     end
 
     context 'with errors recorded' do
@@ -75,7 +75,7 @@ describe I18n::Instrument::Middleware, type: :request do
         config.on_record { raise 'jelly beans' }
         expect { get('/tests') }.to change { recorded_errors.size }.from(0).to(1)
         expect(recorded_errors.first.message).to eq('jelly beans')
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'reports errors that happen during the middleware stack' do
@@ -84,7 +84,7 @@ describe I18n::Instrument::Middleware, type: :request do
         )
 
         expect { get '/tests' }.to change { recorded_errors.size }.from(0).to(2)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
@@ -96,7 +96,7 @@ describe I18n::Instrument::Middleware, type: :request do
 
     it "doesn't record ruby I18n.t calls" do
       expect { get('/tests') }.to_not change { recorded_params.size }.from(0)
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 end

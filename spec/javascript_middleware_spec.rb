@@ -23,7 +23,7 @@ describe I18n::Instrument::Middleware, type: :request do
       change { recorded_params.size }.from(0).to(1)
     )
 
-    expect(response).to be_success
+    expect(response).to be_successful
 
     params = recorded_params.first
     expect(params[:source]).to eq('javascript')
@@ -40,7 +40,7 @@ describe I18n::Instrument::Middleware, type: :request do
       change { recorded_params.size }.from(0)
     )
 
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 
   context 'with instrumentation disabled' do

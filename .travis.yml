@@ -3,12 +3,16 @@ language: ruby
 rvm:
   - 2.4.10
   - 2.5.8
+cache:
+  bundler: true
+env:
+  global:
+    - BUNDLER_VERSION=1.17.3
 gemfile:
   - Gemfile-rails-4.2.x
   - Gemfile-rails-5.0.x
   - Gemfile-rails-5.1.x
   - Gemfile-rails-5.2.x
 before_install:
-    - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
-    - gem install bundler -v '< 2'
+  - gem install bundler -v 1.17.3
 script: bundle exec rspec

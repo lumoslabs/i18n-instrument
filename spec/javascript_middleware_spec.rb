@@ -19,9 +19,15 @@ describe I18n::Instrument::Middleware, type: :request do
   it 'records I18n.t calls in javascript' do
     params = { url: valid_url, key: valid_key, locale: 'en' }
 
-    expect { post(config.js_endpoint, params.to_json, headers) }.to(
-      change { recorded_params.size }.from(0).to(1)
-    )
+    if Rails::VERSION::STRING < '5.0'
+      expect { post(config.js_endpoint, params.to_json, headers) }.to(
+        change { recorded_params.size }.from(0).to(1)
+      )
+    else
+      expect { post(config.js_endpoint, params: params.to_json, headers: headers) }.to(
+        change { recorded_params.size }.from(0).to(1)
+      )
+    end
 
     expect(response).to be_successful
 
@@ -36,9 +42,15 @@ describe I18n::Instrument::Middleware, type: :request do
   it "doesn't record anything when given a blank key" do
     params = { url: valid_url, key: invalid_key, locale: 'en' }
 
-    expect { post(config.js_endpoint, params.to_json, headers) }.to_not(
-      change { recorded_params.size }.from(0)
-    )
+    if Rails::VERSION::STRING < '5.0'
+      expect { post(config.js_endpoint, params.to_json, headers) }.to_not(
+        change { recorded_params.size }.from(0)
+      )
+    else
+      expect { post(config.js_endpoint, params: params.to_json, headers: headers) }.to_not(
+        change { recorded_params.size }.from(0)
+      )
+    end
 
     expect(response).to be_successful
   end
@@ -51,9 +63,15 @@ describe I18n::Instrument::Middleware, type: :request do
     it "doesn't record any javascript I18n.t calls" do
       params = { url: valid_url, key: valid_key, locale: 'en' }
 
-      expect { post(config.js_endpoint, params.to_json, headers) }.to_not(
-        change { recorded_params.size }.from(0)
-      )
+      if Rails::VERSION::STRING < '5.0'
+        expect { post(config.js_endpoint, params.to_json, headers) }.to_not(
+          change { recorded_params.size }.from(0)
+        )
+      else
+        expect { post(config.js_endpoint, params: params.to_json, headers: headers) }.to_not(
+          change { recorded_params.size }.from(0)
+        )
+      end
     end
   end
 end

@@ -13,14 +13,9 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
 
+  s.add_dependency 'rails'
+  s.add_dependency 'railties'
   s.add_dependency 'i18n-debug', '~> 1.0'
-
-  if ENV['RAILS_VERSION']
-    s.add_dependency 'railties', "~> #{ENV['RAILS_VERSION']}"
-  else
-    s.add_dependency 'railties', '<= 5.0.7', '>= 4.0'
-  end
-
   s.add_dependency 'request_store', '~> 1.0'
 
   s.require_path = 'lib'

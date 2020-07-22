@@ -2,3 +2,4 @@
 pkg/
 spec/log
 Gemfile.lock
+Gemfile*.lock

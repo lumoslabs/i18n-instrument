@@ -7,7 +7,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rails', '~> 4.2', '<= 4.2.11.3'
+  gem 'rails', '~> 4.2', '< 5.0'
   gem 'rspec'
   gem 'rspec-rails'
 end

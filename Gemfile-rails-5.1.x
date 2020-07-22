@@ -8,7 +8,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rails', '~> 5.1', '>= 5.1.7'
+  gem 'rails', '~> 5.1'
   gem 'rspec'
   gem 'rspec-rails'
 end
